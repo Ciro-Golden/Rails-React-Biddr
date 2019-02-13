@@ -5,3 +5,21 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+Auction.destroy_all
+
+ActiveRecord::Base.connection.reset_pk_sequence!("auctions")
+
+25.times do
+    Auction.create(
+        title: Faker::Commerce.product_name,
+        description: Faker::IDNumber.valid,
+        price: Faker::Commerce.price(range = 5.0..20000.0, as_string = false),
+        reserve: ["true", "false"].sample,
+        expiry_date: Faker::Date.forward(45)
+    )
+end
+
+auctions = Auction.all
+
+p "Created #{auctions.count} auction entries"
